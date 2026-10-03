@@ -1,4 +1,4 @@
-FROM alpine:3.22 AS build
+FROM alpine:3.24 AS build
 RUN apk add --no-cache cmake gcc musl-dev make curl jq
 # Optionally pin the C library's version so `build-all` can rebuild historical versions. An empty value (the normal
 # build) takes the latest release (tagged capi-v<version> in Corvus.JsonSchema).
@@ -15,7 +15,7 @@ COPY CMakeLists.txt bowtie_corvus_json_schema.c /src/
 RUN cmake -S /src -B /build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/corvus-json-schema \
  && cmake --build /build --parallel 4
 
-FROM alpine:3.22
+FROM alpine:3.24
 RUN apk add --no-cache libgcc
 COPY --from=build /build/bowtie_corvus_json_schema /usr/local/bin/
 CMD ["bowtie_corvus_json_schema"]
